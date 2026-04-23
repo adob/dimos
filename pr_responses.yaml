@@ -213,3 +213,21 @@
   problem: "CI failure: test_high_volume_messages[lcm_context-topic1-values1] — 'Expected 5000 messages, got 2689'. Slow CI runners can't drain the message queue within the 2s timeout."
   solution: "Reduced message count from 5000 to 1000, increased timeout from 2s to 10s, increased stable_duration from 0.1s to 0.5s, and reduced poll interval from 0.1s to 0.05s for better responsiveness."
   commit: d4ba8538e
+
+- pr: 1784
+  comment_id: 3129832873
+  author: leshy
+  file: dimos/visualization/constants.py
+  line: 20
+  problem: "rerun bridge.py doesn't import rerun until start() is called so constants can be imported freely. Suggests using rerun/config.py instead of a generic constants.py if extracting."
+  solution: "Acknowledged — leshy is correct that bridge.py lazy-imports rerun, so the import-cost justification for constants.py is moot. Jeff should decide whether to move RERUN_* defaults into rerun/config.py or keep them in constants.py. No code change made — architectural decision for Jeff."
+  commit: null
+
+- pr: 1784
+  comment_id: 3129875026
+  author: leshy
+  file: dimos/visualization/constants.py
+  line: 23
+  problem: "dimos run doesn't work on this branch (works on dev). Port 9090 appears to conflict with other services (China VPN, TOR). Asks if there's a way to rebind the listen port via config."
+  solution: "Bug report: leshy reports dimos run is broken on this branch. Port 9090 is hardcoded as RERUN_WEB_PORT. This needs investigation by Jeff — likely the websocket click server is binding to 9090 which conflicts with leshy's setup. Should be made configurable via global_config. No code change made — needs Jeff's input on how to integrate with the config system."
+  commit: null
