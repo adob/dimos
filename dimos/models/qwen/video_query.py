@@ -2,6 +2,7 @@
 
 import json
 import os
+from typing import Any
 
 import numpy as np
 from openai import OpenAI
@@ -15,7 +16,7 @@ from dimos.utils.threadpool import get_scheduler
 
 
 def query_single_frame_observable(
-    video_observable: Observable,  # type: ignore[type-arg]
+    video_observable: Observable[Any],
     query: str,
     api_key: str | None = None,
     model_name: str = "qwen2.5-vl-72b-instruct",
@@ -161,8 +162,8 @@ def query_single_frame(
 
 
 def get_bbox_from_qwen(
-    video_stream: Observable,
-    object_name: str | None = None,  # type: ignore[type-arg]
+    video_stream: Observable[Any],
+    object_name: str | None = None,
 ) -> tuple[BBox, float] | None:
     """Get bounding box coordinates from Qwen for a specific object or any object.
 
