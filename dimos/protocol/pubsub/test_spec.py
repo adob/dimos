@@ -165,8 +165,8 @@ def test_multiple_subscribers(
 ) -> None:
     """Test that multiple subscribers receive the same message."""
     with pubsub_context() as x:
-        collector_1 = CallbackCollector(1)
-        collector_2 = CallbackCollector(1)
+        collector_1 = CallbackCollector(1, timeout=15.0)
+        collector_2 = CallbackCollector(1, timeout=15.0)
 
         x.subscribe(topic, collector_1)
         x.subscribe(topic, collector_2)
@@ -216,7 +216,7 @@ def test_multiple_messages(
     """Test that subscribers receive multiple messages in order."""
     with pubsub_context() as x:
         messages_to_send = values[1:] if len(values) > 1 else values
-        collector = CallbackCollector(len(messages_to_send))
+        collector = CallbackCollector(len(messages_to_send), timeout=15.0)
 
         x.subscribe(topic, collector)
 
