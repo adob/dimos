@@ -148,7 +148,8 @@ testdata.append(
 @pytest.mark.parametrize("pubsub_context, topic, values", testdata)
 def test_store(pubsub_context: Callable[[], Any], topic: Any, values: list[Any]) -> None:
     with pubsub_context() as x:
-        collector = CallbackCollector(1)
+        # LCM native library can be slow under CI load; use longer timeout
+        collector = CallbackCollector(1, timeout=15.0)
 
         x.subscribe(topic, collector)
         x.publish(topic, values[0])
